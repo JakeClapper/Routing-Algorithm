@@ -301,6 +301,47 @@ class CustomerAddress:
 #-----------------------------------------------------------------------------------------------------------------------------------------------------     
 #Functions
 #-----------------------------------------------------------------------------------------------------------------------------------------------------     
+def streetmatch(customerAddressStreet, routeSegmentStreet):
+   
+    if customerAddressStreet.lower() == routeSegmentStreet.lower():
+       return True
+    #Translate the street type in the route segment to full expanded name and then recompare to the customer street.
+    temp = customerAddressStreet.rsplit(" ",1)
+    type = temp[1]
+    type = type.lower()
+    newType = ""
+    
+    if type == "road":
+       newType = "Rd"
+    elif type == "lane":
+       newType = "Ln"
+    elif type == "drive":
+       newType = "Dr"   
+    elif type == "avenue":
+       newType = "Ave"   
+    elif type == "wy":
+       newType = "way"
+    elif type == "way":
+       newType = "wy"   
+    elif type == "street":
+       newType = "St"
+    elif type == "court":
+       newType = "Ct"
+    elif type == "str":
+       newType = "st"   
+    elif type == "boulevard":
+       newType = "Blvd"
+    
+    newCustomerAdressStreet = temp[0] + " " + newType
+    if newCustomerAdressStreet.lower() == routeSegmentStreet.lower():
+       return True
+    return False
+    
+
+
+
+
+
 # this function will take given, customer address represented by number and street
 # And loop through the list of route segments untill it finds a match, returning the index of the match.
 # Or loops through the entire list without finding a match returning -1
@@ -317,7 +358,7 @@ def findRouteSegmentNumber(customerAddress, routeSegmentList):
       #Check if the number is in Range being careful of backwords ranges.
       #Case sensitive
        
-      if customerAddress.street.lower() == routeSegment.street.lower():
+      if streetmatch(customerAddress.street, routeSegment.street):
          if int(routeSegment.startRange) != -1:
             if routeSegment.isforward:
                 if int(customerAddress.number) >= int(routeSegment.startRange) and int(customerAddress.number) <= int(routeSegment.endRange):
