@@ -346,14 +346,71 @@ southernShoresData = [
    "160-180 EVEN Ocean Blvd",
    "181-171 ODD Ocean Blvd",
    "170-174 EVEN Duck Rd",
-
-
-
-
-
-
-
-
+   "27-20 Dolphin Rd",
+   "182-189 Ocean Blvd",
+   "Mullet Cir",
+   "190-208 EVEN Ocean Blvd",
+   "207-195 ODD Ocean Blvd",
+   "Pompano Ct",
+   "193-191 ODD Ocean Blvd",
+   "180-198 EVEN  Duck Rd",
+   "29-0 E Dogwood Trail",
+   "210-234 EVEN Ocean Blvd",
+   "231-209 ODD Ocean Blvd",
+   "Sandfiddler Ct",
+   "Perriwinkle Pl",
+   "Mockingbird Ln"
+   "235-239 Ocean Blvd",
+   "Sandpiper Ln",
+   "241-247 Ocean Blvd",
+   "Purple Martin Ln",
+   "248-253 Ocean Blvd",
+   "0-28 Hickory Trail",
+   "Circle Dr",
+   "232 Duck Rd",
+   "1-3 ODD Duck Wds Dr",
+   "27-0 1st Ave",
+   "270-272 EVEN Duck Rd",
+   "24-0 2nd Ave",
+   "282 Duck Rd",
+   "24-0 3rd Ave",
+   "24-0 4th Ave",
+   "298 Duck Rd",
+   "20-0 5th Ave",
+   "304-306 EVEN Duck Rd",
+   "22-0 6th Ave",
+   "310-312 EVEN Duck Rd",
+   "20-0 7th Ave",
+   "316-318 EVEN Duck Rd",
+   "0-26 8th Ave",
+   "29-0 9th Ave",
+   "334 Duck Rd",
+   "27-0 10th Ave",
+   "340 Duck Rd",
+   "28-0 11th Ave",
+   "346-348 EVEN Duck Rd",
+   "26-0 12th Ave",
+   "352 Duck Rd",
+   "28-0 13th Ave",
+   "358-360 EVEN Duck Rd",
+   "Charles Jenkins Ln E",
+   "Ocean Crest Way",
+   "Vivian Ct",
+   "Yolanda Terrace",
+   "Bias Ln E",
+   "Tides Dr",
+   "Tuckahoe Drive E",
+   "Sea Eider Ct",
+   "Thrush Ct",
+   "Sunflower Ct",
+   "Azalea Ct",
+   "Magnolia Ct",
+   "Sea Hawk Dr E",
+   "1135 Duck Rd",
+   "Seabreeze Dr",
+   "Georgetown Sands Rd",
+   "Plover Dr",
+   "1147-1149 ODD Duck Rd"
 
 ]
 
@@ -373,6 +430,8 @@ class RouteSegment:
       self.endRange = -1
       self.isforward = True
       self.numberModifier = NumberModifier.ALL
+      self.apt = "" # this will be a A B or C etc...
+
 
       first_char = address[0]
       if first_char.isdigit():
@@ -392,7 +451,10 @@ class RouteSegment:
 
         range = list[0]
 
-        
+        last_char = range[len(range)-1]
+        if last_char.isalpha():
+           self.apt = last_char
+           range = range[0:len(range)-1]
         if "-" in range:
            #range as a start and end
            rangeList = range.split("-", 1)
@@ -404,7 +466,7 @@ class RouteSegment:
            #range is just a singe value
            self.startRange = int(range)
            self.endRange = int(range)
-        address = list[1]
+        
 
    def print(self):
       print(self.street + " " +  str(self.startRange) + " " + str(self.endRange) + " " +  str(self.isforward))
@@ -444,18 +506,18 @@ class RouteSegment:
        
 
 class CustomerAddress:
-  def __init__(self, number, street):
+  def __init__(self, number, apt, street):
 
     self.number = number
     self.street = street
-
-
     self.routeSegmentNumber = -1
     self.isforward = True 
-
-
+    self.apt = apt
+    
+    
+  
   def print(self):
-     print(str(self.number) + " " + self.street + " " + str(self.routeSegmentNumber) + " " +  str(self.isforward))  
+     print(str(self.number) + self.apt + " " + self.street+ " " + str(self.routeSegmentNumber) + " " +  str(self.isforward))  
 #-----------------------------------------------------------------------------------------------------------------------------------------------------     
 #Functions
 #-----------------------------------------------------------------------------------------------------------------------------------------------------     
@@ -605,12 +667,19 @@ for i in content:
     customerAddress = customerAddress.strip()
     #print(customerAddress)
     list = customerAddress.split(" ",1)
-    number = int(list[0])
+    temp = list[0]
+    last_char = temp[len(temp)-1]
+    if last_char.isalpha():
+      apt = last_char
+      number = int(temp[0:len(temp)-1])
+    else:
+      apt = ""
+      number = int(temp)
     street = list[1]
     
 
    # print(number + " " + street)
-    customerAddress = CustomerAddress(number, street)
+    customerAddress = CustomerAddress(number, apt, street)
     unroutedCustomerList.append(customerAddress)
 
 # iterate through the list of customer address objects and find the route and the route segment number for each customer address
