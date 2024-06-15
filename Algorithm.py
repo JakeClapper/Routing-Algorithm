@@ -52,15 +52,22 @@ inTownDuckData = [
     "Marlin Ct",
     "Cook Dr",
     "117-135 Speckle Trout Dr",
+    "117-135 Speckled Trout Dr",
+    "117-135 SpeckledTrout Dr",
     "1000-0 BayBerry Dr",
     "Gifford Cir",
     "RockFish Ln",
     "115-0 Speckle Trout Dr",
+    "115-0 SpeckleTrout Dr",
+    "115-0 SpeckledTrout Dr",
     "153-148 Speckle Trout Dr",
+    "153-148 SpeckleTrout Dr",
+    "153-148 Speckledtrout Dr",
     "1000-0 Dune Rd",
     "Sea Colony Dr",
     "Olde Duck Rd",
     "Barrier Island Station",
+    "1245 Duck Rd", 
     "Spinnaker Ct",
     "137-122 Ships Watch Dr",
     "ForeSail Ct",
@@ -74,9 +81,11 @@ inTownDuckData = [
 ]
 northDuckData = [
    "100-113 Nor'Banks Dr",
+   "100-113 Nor Banks Dr",
    "Sunfish Ct",
    "Snipe Ct",
    "122 Nor'Banks Dr",
+   "122 Nor Banks Dr"
    "Puffer Ct",
    "WindSurfer Ct",
    "137-0 Spindrift Ln",
@@ -84,28 +93,38 @@ northDuckData = [
    "Sandcastle Ct",
    "111-0 Spyglass Rd",
    "S Snow Geese Dr",
+   "South Snow Geese Dr",
    "N Snow Geese Dr",
+   "North Snow Geese Dr",
    "1309 Duck Rd",
    "1311 Duck Rd",
    "0-105 Wideon Dr",
    "Bald Pate Dr",
    "106-137 Wideon Dr",
    "153-169 Bufflehead Rd",
+   "153-169 Buffell Rd",
    "Whistling Swan Dr",
    "151-143 Bufflehead Rd",
+   "151-143 Buffell Rd",
    "130 Bufflehead Dr",
+   "130 Buffell Dr",
    "1317 Duck Rd",
    "Pintail Dr",
    "141-133 Bufflehead Rd",
+   "141-133 Buffell Rd",
    "126 Bufflehead Rd",
+   "126 Buffell Rd",
    "Wood Duck Rd",
    "1331 Duck Rd",
-   "Canvasback Dr",
+   "Canvasback Dr", 
+   "Canvas back Dr",
    "131-114 Bufflehead Rd",
+   "131-114 Buffell Rd",
    "Spigtail Dr",
    "1345-1351 ODD Duck Rd",
    "Old Squaw Dr",
    "113-100 Bufflehead Rd",
+   "113-100 Buffell Rd",
    "1353-1355 ODD Duck Rd",
    "Dianne St",
    "Rene Ct",
@@ -119,6 +138,7 @@ northDuckData = [
    "Sea Tern Dr E",
    "1377-1379 ODD Duck Rd",
    "Carroll Dr",
+   "Carrol Dr",
    "Hillside Ct",
    "Dock's Ct",
    "1385 Duck Rd",
@@ -180,6 +200,7 @@ pineIslandData= [
    "Great Gap Point",
    "408-430 Myrtle Pond Rd",
    "Sprig Point",
+   "SprigPoint Rd",
    "432-434 Myrtle Pond Rd",
    "Kitsy's Point",
    "435-1000 Myrtle Pond Rd",
@@ -308,6 +329,7 @@ southernShoresData = [
    "Twisted Tree Ct",
    "Bent Oak Ct",
    "Clam Shell Trail",
+   "ClamShell Trail",
    "Otter Slide Ln",
    "Oyster Bed Ln",
    "Goose Feather Ln",
@@ -549,13 +571,37 @@ def streetmatch(customerAddressStreet, routeSegmentStreet):
        newType = "Ct"
     elif type == "str":
        newType = "st"   
-    elif type == "boulevard":
+    elif type == "boulevard": 
        newType = "Blvd"
+    elif type == "pond":
+       newType = "Pd"
+    elif type == "circle":
+       newType = "Cir"
+    elif type == "north":
+       newType = "N"
     
     newCustomerAdressStreet = temp[0] + " " + newType
     if newCustomerAdressStreet.lower() == routeSegmentStreet.lower():
        return True
+    
+   #Compare the customer street, it has to no road, lane ,drive...
+    temp = routeSegmentStreet.rsplit(" ",1 )
+    newRouteSegmentStreet = temp[0]
+    if customerAddressStreet.lower() == newRouteSegmentStreet.lower():
+      return True
+    
+
+
+   #todo there are certain strees where we cannot match becuase they contain the same name
+   # 114 Sea tern
+    temp = routeSegmentStreet.rsplit(" ",2 )
+    newRouteSegmentStreet = temp[0]
+    if customerAddressStreet.lower() == newRouteSegmentStreet.lower():
+      return True
+    
+    
     return False
+    
     
 
 
