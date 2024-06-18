@@ -18,3 +18,10 @@
 
 
 * ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+
+<br>
+<br>
+<br>
+
+**Unit Tests**
+* Created Unit Tests that compared the output to the expected output. The test would pass if the addresses matched, otherwise it would fail. 
