@@ -1,8 +1,8 @@
 <div align="center">
   <h1>ABOUT THIS PROJECT</h1>
-  <p>Description of the project.</p>
+  <p></p>
 </div>
----
+
 * **Ocean Atlantic Rentals Summer 2024 Internship**
 
 * Created an alogrithm that makes the best possible delevory route for the company.
