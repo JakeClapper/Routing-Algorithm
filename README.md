@@ -1,6 +1,9 @@
-**About The Project**
-
-***Ocean Atlantic Rentals Summer 2024 Internship**
+<div align="center">
+  <h1>ABOUT THIS PROJECT</h1>
+  <p>Description of the project.</p>
+</div>
+---
+* **Ocean Atlantic Rentals Summer 2024 Internship**
 
 * Created an alogrithm that makes the best possible delevory route for the company.
 * Instead of manullay sorting Customer addresses. My Program will take customer addresses and sorts them to the most efficient route possible.
