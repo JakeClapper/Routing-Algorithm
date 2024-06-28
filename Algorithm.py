@@ -1,5 +1,5 @@
 from enum import Enum
-
+import argparse
 #-----------------------------------------------------------------------------------------------------------------------------------------------------     
 #raw data
 #---------------------------------------------------------------
@@ -45,6 +45,7 @@ inTownDuckData = [
     "Winauk Ct",
     "Duck Landing Ln",
     "Schooner Ridge",
+    "Schooner Ridge Dr",
     "Chip Ct",
     "Duck Ridge Village Court",
     "Wampum Dr",
@@ -98,7 +99,7 @@ northDuckData = [
    "North Snow Geese Dr",
    "1309 Duck Rd",
    "1311 Duck Rd",
-   "0-105 Wideon Dr",
+   "0-105 Widgeon Dr",
    "Bald Pate Dr",
    "106-137 Wideon Dr",
    "153-169 Bufflehead Rd",
@@ -130,6 +131,7 @@ northDuckData = [
    "Rene Ct",
    "Frazier Ct",
    "Mallard Dr",
+   "Mallard Dr.",
    "Wild Duck Dunes Rd",
    "Trinitie Dr",
    "Quarterdeck Dr",
@@ -173,6 +175,7 @@ northDuckData = [
    "1475 Duck Rd",
    "S Baum Trail",
    "N Baum Trail",
+   "North Baum Trail",
    "1574-1532 EVEN Duck Rd",
    "Quail Way",
    "Gannet Cove",
@@ -352,6 +355,7 @@ southernShoresData = [
    "2-8 EVEN Ocean Blvd",
    "Pelican Way Watch",
    "12 Ocean Blvd",
+   "12 Ocean Blvd.",
    "Sea Bass Cir",
    "18-142 EVEN Ocean Blvd",
    "150-152 EVEN Duck Rd",
@@ -446,7 +450,7 @@ class NumberModifier(Enum):
    EVEN = 2
 
 class RouteSegment:
-   def __init__(self, address):
+   def __init__(self, address,verbose=False):
       self.street = address
       self.startRange = -1
       self.endRange = -1
@@ -537,6 +541,11 @@ class CustomerAddress:
     self.apt = apt
     
     
+
+
+
+
+    
   
   def print(self):
      print(str(self.number) + self.apt + " " + self.street+ " " + str(self.routeSegmentNumber) + " " +  str(self.isforward))  
@@ -558,7 +567,9 @@ def streetmatch(customerAddressStreet, routeSegmentStreet):
     elif type == "lane":
        newType = "Ln"
     elif type == "drive":
-       newType = "Dr"   
+       newType = "Dr"
+    elif type == "Drive":
+       newType = "Dr"      
     elif type == "avenue":
        newType = "Ave"   
     elif type == "wy":
@@ -615,6 +626,8 @@ def streetmatch(customerAddressStreet, routeSegmentStreet):
 # Todo: Replace with a hash Search
 # --------------------------------------------------------------------------
 def findRouteSegmentNumber(customerAddress, routeSegmentList):
+
+  
    index = 0
    for routeSegment in routeSegmentList:
       #determine if this candidate route segment matches the given customer address
