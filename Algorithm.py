@@ -121,7 +121,7 @@ northDuckData = [
    "Canvas back Dr",
    "131-114 Bufflehead Rd",
    "131-114 Buffell Rd",
-   "Spigtail Dr",
+   "Sprigtail Dr",
    "1345-1351 ODD Duck Rd",
    "Old Squaw Dr",
    "113-100 Bufflehead Rd",

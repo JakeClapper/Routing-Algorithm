@@ -1,51 +1,18 @@
-5 3rd ave
-28 ocean blvd
-46 Ocean blvd
-64 Ocean Boulevard
-72 OCean blvd
-86 ocean blvd
-103 Azalea Ct
-103 Ocean Crest way
-104 Schooner Ridge
-105 SpeckledTrout Drive
-106 Dune Road
-107 Cadwall rd
-108 Jasmine Court
-109 Olde Duck Road
-112 sea Colony Drive
-114 Sea tern
-114 Canvas Back Drive
-114 Duck Hunt Club
-117 Sea Colony Dr
-119 Buffell Rd
-122 Nor Banks
-124 Sound Sea ave
-126 Gifford Circle
-127 oyster Catcher Lane
-128 Carrol Drive
-132 Four Seasons
-134 North Snow Geese
-135 Bufflehead Rd
-136 Sea Eider Ct
-137 Martin Lane
-137 Salt House Road
-138 ShearWater way
-150 four seasons Lane
-151 schooner ridge
-152 duck landing 
-153 clamshell trail
-162 duck Road
-165 salt house Road
-169 bufflehead Rd
-172 four seasons Lane
-175 cottage cove rd
-199 schooner ridge
-217 hillcrest Drive
-315 sea oats trail
-375 deep neck rd
-391 deep neck rd
-395 deep neck rd
-427 sprigpoint Rd
-428 myrtle Pond
-1170 Duck Road
-1245 Duck Rd
+213 Hicks bay Lane
+3 Circle Drive
+16 5th Ave
+23 1st Ave
+27 Circle Drive
+88 Ocean Blvd
+115 Sprigtail Drive
+118 Scarborough Lane
+125 Foresail Ct
+128 Gifford Circle
+144 Skimmer Way
+145 Salt House Rd
+155A Ocean Blvd
+160 Four Seasons Lane
+197 Ocean Blvd
+282 Sea Oats Trail
+385 Deep Neck Road
+1112 Tides Drive
