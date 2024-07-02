@@ -3,6 +3,8 @@ import argparse
 #-----------------------------------------------------------------------------------------------------------------------------------------------------     
 #raw data
 #---------------------------------------------------------------
+verbose = False
+
 inTownDuckData = [
     "1172-1160 EVEN Duck Rd",
     "Beachcomber Ct",
@@ -450,7 +452,7 @@ class NumberModifier(Enum):
    EVEN = 2
 
 class RouteSegment:
-   def __init__(self, address,verbose=False):
+   def __init__(self, address):
       self.street = address
       self.startRange = -1
       self.endRange = -1
@@ -492,10 +494,12 @@ class RouteSegment:
            #range is just a singe value
            self.startRange = int(range)
            self.endRange = int(range)
-        
+
+       
 
    def print(self):
-      print(self.street + " " +  str(self.startRange) + " " + str(self.endRange) + " " +  str(self.isforward))
+      if verbose:
+         print(self.street + " " +  str(self.startRange) + " " + str(self.endRange) + " " +  str(self.isforward))
 
 
 # This method will check the given number and street to see if this routesegments matches the given address]
@@ -520,8 +524,10 @@ class RouteSegment:
         
 
        
-
-
+parser = argparse.ArgumentParser(description='Filter addresses')
+parser.add_argument('-v', '--verbose',action="store_true", help='filter addresses')
+args = parser.parse_args() 
+verbose  = args.verbose
 
 
 
