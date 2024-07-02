@@ -4,7 +4,7 @@ import argparse
 #raw data
 #---------------------------------------------------------------
 verbose = False
-
+unitTests = False
 inTownDuckData = [
     "1172-1160 EVEN Duck Rd",
     "Beachcomber Ct",
@@ -524,10 +524,7 @@ class RouteSegment:
         
 
        
-parser = argparse.ArgumentParser(description='Filter addresses')
-parser.add_argument('-v', '--verbose',action="store_true", help='filter addresses')
-args = parser.parse_args() 
-verbose  = args.verbose
+
 
 
 
@@ -635,6 +632,7 @@ def findRouteSegmentNumber(customerAddress, routeSegmentList):
 
   
    index = 0
+   
    for routeSegment in routeSegmentList:
       #determine if this candidate route segment matches the given customer address
       isMatch = False #routesegment.match(customerAddress.number,customerAddress.street)
@@ -677,306 +675,254 @@ def findRouteSegmentNumber(customerAddress, routeSegmentList):
 
    return -1
 
-    
+def customerAddressParsing():
+   return 0
+def runUnitTests():
+# This function will call all the unit tests.
+# There will be 1 function for each unit test
+# This function will keep track of the tests that pass and those that fail
+# This function will emit a summary after all the unit tests have run
+   totalTests = 0
+   totalFailures = 0
+   
+   
+   totalTests += 1
+   totalFailures += customerAddressParsing()
 
+   return 
+
+
+def findAndReverseDuplicateBackwardsRouteSegments(list):
+   index = 0
+   length = len(list)
+   while index < length:
+      customerAddress = list[index]
+      if customerAddress.isforward == False:
+         
+         # If there are multiple customer addresses that follow with the same RouteSgement number
+         # All those customer addresses objects need to be reverse in the final customer list
+
+         routeSegmentNumber = customerAddress.routeSegmentNumber
+         lookAheadIndex = index
+         while lookAheadIndex + 1 < length and list[lookAheadIndex+1].routeSegmentNumber == routeSegmentNumber:
+            lookAheadIndex = lookAheadIndex+1
+            
+         if(lookAheadIndex != index):
+            if verbose:
+               print('Repeated Backwards route segments Found '+ str(index) + " " + str(lookAheadIndex))
+             
+             # Reverse the Repeated Backwards route segments
+             # Create a Temp array of the ranges to reverse
+             # Reverse the Temp Array, then put back into the original array 
+
+            tempArray = list[index: lookAheadIndex+1]
+            new_lst = tempArray[::-1]
+            list[index: lookAheadIndex+1] = new_lst
+         
+            index = lookAheadIndex+1
+            
+         else:
+            #There is only one record for this backwards route segment
+            # So because there is only one record there is nothing to reverse
+            # #check the next one
+            index = index +1   
+            
+         
+      else:
+            #This route segment is forward so already in the correct order
+            #check the next one
+            index = index +1   
+   
+   
+   
+   return
+
+#==========================================
+#This function will compute the routes. 
+#==========================================
+
+def computeRoutes():
+   #iterate through the raw data source and create objects for each
+   routesegmentintownducklist = []
+   for i in inTownDuckData:
+      routesegment = RouteSegment(i)
+      routesegmentintownducklist.append(routesegment)
+
+   for i in routesegmentintownducklist:
+      i.print()
+
+   routesegmentnorthducklist = []
+   for i in northDuckData:
+      routesegment = RouteSegment(i)
+      routesegmentnorthducklist.append(routesegment)
+
+   for i in routesegmentnorthducklist:
+      i.print()   
+
+
+   routesegmentpineislandlist = []
+   for i in pineIslandData:
+      routesegment = RouteSegment(i)
+      routesegmentpineislandlist.append(routesegment)
+
+   for i in routesegmentpineislandlist:
+      i.print()   
+
+   routesegmentsouthernshoreslist = []
+   for i in southernShoresData:
+      routesegment = RouteSegment(i)
+      routesegmentsouthernshoreslist.append(routesegment)
+
+   for i in routesegmentsouthernshoreslist:
+      i.print()
+
+
+   file = open("CustomerDropoffList.txt", "r")
+   content = file.readlines()
+   #print(content)
+   file.close()
+
+   #walk the list of customer addresses. and convert each customer address into an object
+   # with a sequence number and an is forward boolean
+   unroutedCustomerList = []
+   for i in content:
+      customerAddress = i.replace("\n","")
+      customerAddress = customerAddress.strip()
+      #print(customerAddress)
+      list = customerAddress.split(" ",1)
+      temp = list[0]
+      last_char = temp[len(temp)-1]
+      if last_char.isalpha():
+         apt = last_char
+         number = int(temp[0:len(temp)-1])
+      else:
+         apt = ""
+         number = int(temp)
+      street = list[1]
+      
+
+      # print(number + " " + street)
+      customerAddress = CustomerAddress(number, apt, street)
+      unroutedCustomerList.append(customerAddress)
+
+   # iterate through the list of customer address objects and find the route and the route segment number for each customer address
+   # then assign the route segment number to the customer address    
+   customerListForInTownDuck = []
+   customerListForNorthDuck = []
+   customerListForPineIsland = []
+   customerListForSouthernShores = [] 
+   for customerAddress in unroutedCustomerList:
+      #compute the route segment number for this address
+      routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentintownducklist)
+      if routeSegmentNumber == -1:
+         routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentnorthducklist)
+         if routeSegmentNumber == -1:
+            routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentpineislandlist)
+            if routeSegmentNumber == -1:
+               routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentsouthernshoreslist)
+               if routeSegmentNumber != -1:
+                  
+                  customerListForSouthernShores.append(customerAddress)
+                  customerAddress.isforward = routesegmentsouthernshoreslist[routeSegmentNumber].isforward
+
+
+               
+            else:
+               customerListForPineIsland.append(customerAddress)
+               customerAddress.isforward = routesegmentpineislandlist[routeSegmentNumber].isforward
+      
+         
+               
+         else:
+            customerListForNorthDuck.append(customerAddress)
+            customerAddress.isforward = routesegmentnorthducklist[routeSegmentNumber].isforward
+
+      
+         
+      else:
+         customerListForInTownDuck.append(customerAddress)
+         customerAddress.isforward = routesegmentintownducklist[routeSegmentNumber].isforward
+
+            
+      
+         
+
+
+
+      if routeSegmentNumber == -1:
+         print("ERROR: Cannot Find this Customer Address " + str(customerAddress.number)+ " " + customerAddress.street)
+      else:
+         customerAddress.routeSegmentNumber = routeSegmentNumber
+         
+
+   #We have moved each customer address to its correct routing array
+   # And given each customer address a route segment number
+
+   #Sort each list of customer addresses based on the routing number attribute
+   customerListForInTownDuck.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)
+   customerListForNorthDuck.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)
+   customerListForPineIsland.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)
+   customerListForSouthernShores.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)       
+
+   #check for duplicate routingSegmentnumbers, and whose isFoward attribute is false
+   # these need to be put in reverse order
+
+   findAndReverseDuplicateBackwardsRouteSegments(customerListForInTownDuck)
+   findAndReverseDuplicateBackwardsRouteSegments(customerListForNorthDuck)
+   findAndReverseDuplicateBackwardsRouteSegments(customerListForPineIsland)
+   findAndReverseDuplicateBackwardsRouteSegments(customerListForSouthernShores)
+
+   
+      
+   print('---------------------------------------')
+   print("THIS IS THE FINAL SOUTHERN SHORES ROUTE")
+   print('---------------------------------------')
+   print('')
+
+   for customerAddress in customerListForSouthernShores:
+      customerAddress.print() 
+      
+   print('---------------------------------------')
+   print("THIS IS THE FINAL IN TOWN DUCK ROUTE")
+   print('---------------------------------------')
+   print('')
+
+   for customerAddress in customerListForInTownDuck:
+      customerAddress.print()
+      
+   print('---------------------------------------')
+   print("THIS IS THE FINAL NORTH DUCK ROUTE")
+   print('---------------------------------------')
+   print('')
+
+   for customerAddress in customerListForNorthDuck:
+      customerAddress.print()
+
+   print('---------------------------------------')
+   print("THIS IS THE FINAL PINE ISLAND ROUTE")
+   print('---------------------------------------')
+   print('')
+
+   for customerAddress in customerListForPineIsland:
+      customerAddress.print()
+      return
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------     
 #Main program starts here
-#-----------------------------------------------------------------------------------------------------------------------------------------------------     
+#-----------------------------------------------------------------------------------------------------------------------------------------------------   
+#-----------------------------------------------------------------------------------------------------------------------------------------------------  
+#----------------------------------------------------------------------------------------------------------------------------------------------------- 
+#----------------------------------------------------------------------------------------------------------------------------------------------------- 
+parser = argparse.ArgumentParser(description='Filter addresses')
+parser.add_argument('-v', '--verbose',action="store_true", help='filter addresses')
+parser.add_argument('-u','--unitTests',action="store_true")
+args = parser.parse_args() 
+verbose  = args.verbose
+unitTests  = args.unitTests 
+if unitTests:
+   runUnitTests()
+else:
+   computeRoutes()
 
-#iterate through the raw data source and create objects for each
-routesegmentintownducklist = []
-for i in inTownDuckData:
-   routesegment = RouteSegment(i)
-   routesegmentintownducklist.append(routesegment)
+#this is the end of the program
 
-for i in routesegmentintownducklist:
-   i.print()
-
-routesegmentnorthducklist = []
-for i in northDuckData:
-   routesegment = RouteSegment(i)
-   routesegmentnorthducklist.append(routesegment)
-
-for i in routesegmentnorthducklist:
-   i.print()   
-
-
-routesegmentpineislandlist = []
-for i in pineIslandData:
-   routesegment = RouteSegment(i)
-   routesegmentpineislandlist.append(routesegment)
-
-for i in routesegmentpineislandlist:
-   i.print()   
-
-routesegmentsouthernshoreslist = []
-for i in southernShoresData:
-   routesegment = RouteSegment(i)
-   routesegmentsouthernshoreslist.append(routesegment)
-
-for i in routesegmentsouthernshoreslist:
-   i.print()
-
-
-file = open("CustomerDropoffList.txt", "r")
-content = file.readlines()
-#print(content)
-file.close()
-
-#walk the list of customer addresses. and convert each customer address into an object
-# with a sequence number and an is forward boolean
-unroutedCustomerList = []
-for i in content:
-    customerAddress = i.replace("\n","")
-    customerAddress = customerAddress.strip()
-    #print(customerAddress)
-    list = customerAddress.split(" ",1)
-    temp = list[0]
-    last_char = temp[len(temp)-1]
-    if last_char.isalpha():
-      apt = last_char
-      number = int(temp[0:len(temp)-1])
-    else:
-      apt = ""
-      number = int(temp)
-    street = list[1]
-    
-
-   # print(number + " " + street)
-    customerAddress = CustomerAddress(number, apt, street)
-    unroutedCustomerList.append(customerAddress)
-
-# iterate through the list of customer address objects and find the route and the route segment number for each customer address
-# then assign the route segment number to the customer address    
-customerListForInTownDuck = []
-customerListForNorthDuck = []
-customerListForPineIsland = []
-customerListForSouthernShores = [] 
-for customerAddress in unroutedCustomerList:
-    #compute the route segment number for this address
-    routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentintownducklist)
-    if routeSegmentNumber == -1:
-       routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentnorthducklist)
-       if routeSegmentNumber == -1:
-          routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentpineislandlist)
-          if routeSegmentNumber == -1:
-             routeSegmentNumber = findRouteSegmentNumber(customerAddress, routesegmentsouthernshoreslist)
-             if routeSegmentNumber != -1:
-                
-                customerListForSouthernShores.append(customerAddress)
-                customerAddress.isforward = routesegmentsouthernshoreslist[routeSegmentNumber].isforward
-
-
-            
-          else:
-             customerListForPineIsland.append(customerAddress)
-             customerAddress.isforward = routesegmentpineislandlist[routeSegmentNumber].isforward
-   
-       
-            
-       else:
-          customerListForNorthDuck.append(customerAddress)
-          customerAddress.isforward = routesegmentnorthducklist[routeSegmentNumber].isforward
-
-   
-        
-    else:
-       customerListForInTownDuck.append(customerAddress)
-       customerAddress.isforward = routesegmentintownducklist[routeSegmentNumber].isforward
-
-          
-    
-       
-
-
-
-    if routeSegmentNumber == -1:
-       print("ERROR: Cannot Find this Customer Address " + str(customerAddress.number)+ " " + customerAddress.street)
-    else:
-       customerAddress.routeSegmentNumber = routeSegmentNumber
-       
-
-#We have moved each customer address to its correct routing array
-# And given each customer address a route segment number
-
-#Sort each list of customer addresses based on the routing number attribute
-customerListForInTownDuck.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)
-customerListForNorthDuck.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)
-customerListForPineIsland.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)
-customerListForSouthernShores.sort(key=lambda x: (x.routeSegmentNumber, x.number), reverse=False)       
-
-#check for duplicate routingSegmentnumbers, and whose isFoward attribute is false
-# these need to be put in reverse order
-
-index = 0
-length = len(customerListForInTownDuck)
-while index < length:
-   customerAddress = customerListForInTownDuck[index]
-   if customerAddress.isforward == False:
-      
-      # If there are multiple customer addresses that follow with the same RouteSgement number
-      # All those customer addresses objects need to be reverse in the final customer list
-
-      routeSegmentNumber = customerAddress.routeSegmentNumber
-      lookAheadIndex = index
-      while lookAheadIndex + 1 < length and customerListForInTownDuck[lookAheadIndex+1].routeSegmentNumber == routeSegmentNumber:
-         lookAheadIndex = lookAheadIndex+1
-         
-      if(lookAheadIndex != index):
-        print('Problem Found '+ str(index) + " " + str(lookAheadIndex))
-        # Create a Temp array of the ranges to reverse
-        # Reverse the Temp Array, then put back into the original array 
-
-        tempArray = customerListForInTownDuck[index: lookAheadIndex+1]
-        new_lst = tempArray[::-1]
-        customerListForInTownDuck[index: lookAheadIndex+1] = new_lst
-       
-        index = lookAheadIndex+1
-         
-      else:
-         #No Problem, check the next one
-         index = index +1   
-         
-      
-   else:
-         #No Problem, check the next one
-         index = index +1   
-#-------------------------------------------------------------------------------------------------------------------
-index = 0
-length = len(customerListForNorthDuck)
-while index < length:
-   customerAddress = customerListForNorthDuck[index]
-   if customerAddress.isforward == False:
-      
-      # If there are multiple customer addresses that follow with the same RouteSgement number
-      # All those customer addresses objects need to be reverse in the final customer list
-
-      routeSegmentNumber = customerAddress.routeSegmentNumber
-      lookAheadIndex = index
-      while lookAheadIndex + 1 < length and customerListForNorthDuck[lookAheadIndex+1].routeSegmentNumber == routeSegmentNumber:
-         lookAheadIndex = lookAheadIndex+1
-         
-      if(lookAheadIndex != index):
-        print('Problem Found '+ str(index) + " " + str(lookAheadIndex))
-        # Create a Temp array of the ranges to reverse
-        # Reverse the Temp Array, then put back into the original array 
-
-        tempArray = customerListForNorthDuck[index: lookAheadIndex+1]
-        new_lst = tempArray[::-1]
-        customerListForNorthDuck[index: lookAheadIndex+1] = new_lst
-       
-        index = lookAheadIndex+1
-         
-      else:
-         #No Problem, check the next one
-         index = index +1   
-         
-      
-   else:
-         #No Problem, check the next one
-         index = index +1   
-#-------------------------------------------------------------------------------------------------------------------            
-index = 0
-length = len(customerListForPineIsland)
-while index < length:
-   customerAddress = customerListForPineIsland[index]
-   if customerAddress.isforward == False:
-      
-      # If there are multiple customer addresses that follow with the same RouteSgement number
-      # All those customer addresses objects need to be reverse in the final customer list
-
-      routeSegmentNumber = customerAddress.routeSegmentNumber
-      lookAheadIndex = index
-      while lookAheadIndex + 1 < length and customerListForPineIsland[lookAheadIndex+1].routeSegmentNumber == routeSegmentNumber:
-         lookAheadIndex = lookAheadIndex+1
-         
-      if(lookAheadIndex != index):
-        print('Problem Found '+ str(index) + " " + str(lookAheadIndex))
-        # Create a Temp array of the ranges to reverse
-        # Reverse the Temp Array, then put back into the original array 
-
-        tempArray = customerListForPineIsland[index: lookAheadIndex+1]
-        new_lst = tempArray[::-1]
-        customerListForPineIsland[index: lookAheadIndex+1] = new_lst
-       
-        index = lookAheadIndex+1
-         
-      else:
-         #No Problem, check the next one
-         index = index +1   
-         
-      
-   else:
-         #No Problem, check the next one
-         index = index +1   
-#-------------------------------------------------------------------------------------------------------------------   
-index = 0
-length = len(customerListForSouthernShores)
-while index < length:
-   customerAddress = customerListForSouthernShores[index]
-   if customerAddress.isforward == False:
-      
-      # If there are multiple customer addresses that follow with the same RouteSgement number
-      # All those customer addresses objects need to be reverse in the final customer list
-
-      routeSegmentNumber = customerAddress.routeSegmentNumber
-      lookAheadIndex = index
-      while lookAheadIndex + 1 < length and customerListForSouthernShores[lookAheadIndex+1].routeSegmentNumber == routeSegmentNumber:
-         lookAheadIndex = lookAheadIndex+1
-         
-      if(lookAheadIndex != index):
-        print('Problem Found '+ str(index) + " " + str(lookAheadIndex))
-        # Create a Temp array of the ranges to reverse
-        # Reverse the Temp Array, then put back into the original array 
-
-        tempArray = customerListForSouthernShores[index: lookAheadIndex+1]
-        new_lst = tempArray[::-1]
-        customerListForSouthernShores[index: lookAheadIndex+1] = new_lst
-       
-        index = lookAheadIndex+1
-         
-      else:
-         #No Problem, check the next one
-         index = index +1   
-         
-      
-   else:
-         #No Problem, check the next one
-         index = index +1    
-               
-
-   
-   
-   
-print('---------------------------------------')
-print("THIS IS THE FINAL SOUTHERN SHORES ROUTE")
-print('---------------------------------------')
-print('')
-
-for customerAddress in customerListForSouthernShores:
-   customerAddress.print() 
-   
-print('---------------------------------------')
-print("THIS IS THE FINAL IN TOWN DUCK ROUTE")
-print('---------------------------------------')
-print('')
-
-for customerAddress in customerListForInTownDuck:
-   customerAddress.print()
-   
-print('---------------------------------------')
-print("THIS IS THE FINAL NORTH DUCK ROUTE")
-print('---------------------------------------')
-print('')
-
-for customerAddress in customerListForNorthDuck:
-   customerAddress.print()
-
-print('---------------------------------------')
-print("THIS IS THE FINAL PINE ISLAND ROUTE")
-print('---------------------------------------')
-print('')
-
-for customerAddress in customerListForPineIsland:
-   customerAddress.print()
