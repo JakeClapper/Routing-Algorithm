@@ -25,3 +25,5 @@
 
 **Unit Tests**
 * Created Unit Tests that compared the output to the expected output. The test would pass if the addresses matched, otherwise it would fail. 
+* Unit tests are essential because they ensure the quality of the software. Unit tests verify parts of the code to ensure that there are no regressions
+* when changes are made. Unit tests are also helpful for developement, because they can help identify problems that the developer testing did not reveal. 
