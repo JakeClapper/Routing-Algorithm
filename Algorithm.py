@@ -381,7 +381,7 @@ southernShoresData = [
    "207-195 ODD Ocean Blvd",
    "Pompano Ct",
    "193-191 ODD Ocean Blvd",
-   "180-198 EVEN  Duck Rd",
+   "180-198 EVEN Duck Rd",
    "29-0 E Dogwood Trail",
    "210-234 EVEN Ocean Blvd",
    "231-209 ODD Ocean Blvd",
@@ -675,8 +675,155 @@ def findRouteSegmentNumber(customerAddress, routeSegmentList):
 
    return -1
 
-def customerAddressParsing():
-   return 0
+def routeSegmentParsingODDRangeTest():
+   #This unit test Checks the parsing of the route segment constructor
+   rs = RouteSegment("169-159 ODD Ocean Blvd")
+   success  = 0
+   if rs.endRange != 159:
+      success = 1
+      print("Error Test Failed: End Range")
+   if rs.numberModifier != NumberModifier.ODD:
+      success = 1
+      print("Error Test Failed: Not Equal to odd")
+      
+   if rs.startRange != 169:
+      success = 1
+      print("Error Test Failed: Start Range")
+      
+   if rs.apt != "":
+      success = 1
+      print("Error Test Failed: Apt Number")
+      
+   if rs.street != "Ocean Blvd":
+      success = 1
+      print("Error Test Failed Street " + rs.street)   
+      
+   if rs.isforward == True:
+      success = 1
+      print("Error Test Failed")    
+             
+   return success
+
+def routeSegmentParsingnoRangeTest():
+   #This unit test Checks the parsing of the route segment constructor
+   rs = RouteSegment("Sandfiddler Ct")
+   success  = 0
+   if rs.endRange != -1:
+      success = 1
+      print("Error Test Failed: End Range")
+   if rs.numberModifier != NumberModifier.ALL:
+      success = 1
+      print("Error Test Failed: Not Equal to odd")
+      
+   if rs.startRange != -1:
+      success = 1
+      print("Error Test Failed: Start Range")
+      
+   if rs.apt != "":
+      success = 1
+      print("Error Test Failed: Apt Number")
+      
+   if rs.street != "Sandfiddler Ct":
+      success = 1
+      print("Error Test Failed Street " + rs.street)   
+      
+   if rs.isforward != True:
+      success = 1
+      print("Error Test Failed is forward")    
+             
+   return success
+
+def routeSegmentParsingsingleRangeTest():
+   #This unit test Checks the parsing of the route segment constructor
+   rs = RouteSegment("232 Duck Rd")
+   success  = 0
+   if rs.endRange != 232:
+      success = 1
+      print("Error Test Failed: End Range")
+   if rs.numberModifier != NumberModifier.ALL:
+      success = 1
+      print("Error Test Failed: Not Equal to odd")
+      
+      
+   if rs.startRange != 232:
+      success = 1
+      print("Error Test Failed: Start Range")
+      
+   if rs.apt != "":
+      success = 1
+      print("Error Test Failed: Apt Number")
+      
+   if rs.street != "Duck Rd":
+      success = 1
+      print("Error Test Failed Street " + rs.street)   
+      
+   if rs.isforward != True:
+      success = 1
+      print("Error Test Failed is forward")    
+             
+   return success
+
+def routeSegmentParsingaptRangeTest():
+   #This unit test Checks the parsing of the route segment constructor
+   rs = RouteSegment("148A Ocean Blvd")
+   success  = 0
+   if rs.endRange != 148:
+      success = 1
+      print("Error Test Failed: End Range")
+   if rs.numberModifier != NumberModifier.ALL:
+      success = 1
+      print("Error Test Failed: Not Equal to odd")
+      
+   if rs.startRange != 148:
+      success = 1
+      print("Error Test Failed: Start Range")
+      
+   if rs.apt != "A":
+      success = 1
+      print("Error Test Failed: Apt Number")
+      
+   if rs.street != "Ocean Blvd":
+      success = 1
+      print("Error Test Failed Street " + rs.street)   
+      
+   if rs.isforward != True:
+      success = 1
+      print("Error Test Failed is forward")    
+             
+   return success
+
+def routeSegmentParsingevenRangeTest():
+   #This unit test Checks the parsing of the route segment constructor
+   rs = RouteSegment("180-198 EVEN Duck Rd")
+   success  = 0
+   if rs.endRange != 198:
+      success = 1
+      print("Error Test Failed: End Range")
+   if rs.numberModifier != NumberModifier.EVEN:
+      success = 1
+      print("Error Test Failed: Not Equal to odd")
+      
+   if rs.startRange != 180:
+      success = 1
+      print("Error Test Failed: Start Range")
+      
+   if rs.apt != "":
+      success = 1
+      print("Error Test Failed: Apt Number")
+      
+   if rs.street != "Duck Rd":
+      success = 1
+      print("Error Test Failed Street " + rs.street)   
+      
+   if rs.isforward != True:
+      success = 1
+      print("Error Test Failed is forward")    
+             
+   return success
+
+
+
+
 def runUnitTests():
 # This function will call all the unit tests.
 # There will be 1 function for each unit test
@@ -687,8 +834,21 @@ def runUnitTests():
    
    
    totalTests += 1
-   totalFailures += customerAddressParsing()
-
+   totalFailures += routeSegmentParsingODDRangeTest()
+   
+   totalTests += 1
+   totalFailures += routeSegmentParsingnoRangeTest()
+   
+   totalTests += 1
+   totalFailures += routeSegmentParsingsingleRangeTest()
+   
+   totalTests += 1
+   totalFailures += routeSegmentParsingaptRangeTest()
+   
+   totalTests += 1
+   totalFailures += routeSegmentParsingevenRangeTest()
+   
+   print('total Tests: ' + str(totalTests) ,'total Failures:' + str(totalFailures))
    return 
 
 
