@@ -103,7 +103,7 @@ northDuckData = [
    "1311 Duck Rd",
    "0-105 Widgeon Dr",
    "Bald Pate Dr",
-   "106-137 Wideon Dr",
+   "106-137 Widgeon Dr",
    "153-169 Bufflehead Rd",
    "153-169 Buffell Rd",
    "Whistling Swan Dr",
